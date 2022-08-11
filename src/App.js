@@ -1,19 +1,39 @@
 import "./styles.css";
 
+// import {CalculatorButtons} from "./calcButtons";
+import { ACTIONS } from "./Constants/Constants";
+import { useReducer } from "react";
+import { DigitButton} from "./digitButton";
+
+
+function reducer(state, {type, payload}) {
+  switch (type) {
+    case ACTIONS.ADD_DIGIT: 
+      return {
+        ...state,
+        currentOperand: `${state.currentOperand || ""}${payload.digit}`
+      }
+    default: return null;
+  }
+}
+
 function App() {
+  const [{currentOperand, previousOperand, operation}, dispatch] = useReducer(reducer, {})
+
   return (
     <div className="calculator-grid">
       <div className="output">
         <div className="previous-operand">
-          1234,567 *
+          {previousOperand} {operation}
         </div>
         <div className="current-operand">
-          1234,567
+          {currentOperand}
         </div>
       </div>
+      <>
       <button className="spanTwoButton">AC</button>
       <button>DEL</button>
-      <button>÷</button>
+      <DigitButton digit="÷" dispatch={dispatch}/>
       <button>1</button>
       <button>2</button>
       <button>3</button>
@@ -29,6 +49,7 @@ function App() {
       <button>.</button>
       <button>0</button>
       <button className="spanTwoButton">=</button>
+    </>
     </div>
   );
 }
